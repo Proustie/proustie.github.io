@@ -199,39 +199,61 @@
            ============================================= */
         .section-header {
             position: relative;
-            height: 280px;
+            height: 320px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
 
+        /* Overlay multicapa: oscurece + añade color tierra */
         .section-header::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(30,45,30,0.3), rgba(20,35,20,0.55));
+            background:
+                linear-gradient(to bottom,
+                    rgba(20,32,20,0.45) 0%,
+                    rgba(15,28,15,0.72) 50%,
+                    rgba(20,32,20,0.55) 100%),
+                linear-gradient(135deg,
+                    rgba(59,74,63,0.3) 0%,
+                    rgba(122,92,62,0.2) 100%);
             z-index: 1;
+        }
+
+        /* Degradado inferior que tapa la marca de agua */
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 52px;
+            background: linear-gradient(to top, rgba(10,20,10,0.85), transparent);
+            z-index: 2;
         }
 
         .section-header h2 {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             font-family: 'Cormorant Garamond', Georgia, serif;
             font-size: clamp(1.2em, 4vw, 2.1em);
             font-weight: 300;
             font-style: italic;
             color: var(--blanco);
             text-align: center;
-            padding: 0 28px;
+            padding: 0 40px;
             letter-spacing: 0.06em;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+            text-shadow:
+                0 2px 12px rgba(0,0,0,0.6),
+                0 0 40px rgba(0,0,0,0.4);
             line-height: 1.3;
         }
 
         /* Ornamento inferior eliminado — más limpio */
 
-        /* Vídeo de fondo */
+        /* Vídeo de fondo con filtro de color */
         .video-background {
             position: absolute;
             inset: 0;
@@ -243,6 +265,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            filter: saturate(0.75) sepia(0.25) brightness(0.88);
         }
 
         /* Fondos de color cuando no hay vídeo */
