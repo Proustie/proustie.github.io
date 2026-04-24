@@ -3,111 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iván y Minerva - 23 de Mayo 2026</title>
-    
-    <!-- Google Fonts - Tipografías elegantes -->
+    <title>Iván y Minerva · 23 de Mayo 2026</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
     <style>
+        /* =============================================
+           VARIABLES Y RESET
+           ============================================= */
+        :root {
+            --verde-oscuro:   #3b4a3f;
+            --verde-medio:    #5a7060;
+            --verde-suave:    #8a9e8d;
+            --dorado:         #b89a5a;
+            --dorado-claro:   #d4b87a;
+            --tierra:         #c4a882;
+            --tierra-claro:   #e8ddd0;
+            --madera:         #7a5c3e;
+            --crema:          #f7f4ef;
+            --crema-oscura:   #ede8e0;
+            --texto:          #2a2a25;
+            --texto-suave:    #6b6558;
+            --blanco:         #ffffff;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Lora', Georgia, serif;
-            background: #fafaf8;
-            color: #2c2c2c;
+            font-family: 'Jost', sans-serif;
+            background: var(--crema);
+            color: var(--texto);
             line-height: 1.8;
             overflow-x: hidden;
         }
 
-        /* ========================================
-           CABECERA PRINCIPAL
-           ======================================== */
+        /* =============================================
+           CABECERA
+           ============================================= */
         .header {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('imagenes/portada.jpg');
-            background-size: cover;
-            background-position: center;
-            background-color: #d4af37;
-            background-attachment: fixed;
-            color: white;
+            background:
+                linear-gradient(rgba(40, 52, 40, 0.52), rgba(30, 40, 30, 0.62)),
+                url('imagenes/portada.jpg') center/cover no-repeat;
+            background-color: var(--verde-oscuro);
+            color: var(--blanco);
             text-align: center;
-            padding: 150px 20px;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
             position: relative;
+        }
+
+        /* Línea decorativa lateral izquierda — visible siempre */
+        .header::after {
+            content: '';
+            position: absolute;
+            left: 32px;
+            top: 15%;
+            bottom: 15%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--dorado-claro) 30%, var(--dorado-claro) 70%, transparent);
+            opacity: 0.5;
+        }
+
+        .header-ornament {
+            font-size: 0.75em;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--dorado-claro);
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 1.2s ease-out 0.2s forwards;
         }
 
         .header h1 {
-            font-size: 5.5em;
-            font-weight: 300;
-            margin-bottom: 30px;
-            text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
             font-family: 'Cormorant Garamond', Georgia, serif;
-            letter-spacing: 12px;
-            animation: fadeInDown 1.5s ease-out;
+            font-size: clamp(2.8em, 9vw, 6.5em);
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            line-height: 1.1;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+            opacity: 0;
+            animation: fadeUp 1.4s ease-out 0.4s forwards;
+        }
+
+        .header-divider {
+            margin: 32px auto;
+            width: 60px;
+            height: 1px;
+            background: var(--dorado-claro);
+            opacity: 0.7;
+            animation: fadeUp 1.4s ease-out 0.7s forwards;
+            opacity: 0;
         }
 
         .header .date {
-            font-size: 2em;
+            font-family: 'Jost', sans-serif;
+            font-size: clamp(0.85em, 3vw, 1.1em);
             font-weight: 300;
-            letter-spacing: 6px;
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-            animation: fadeInUp 1.5s ease-out 0.3s backwards;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+            opacity: 0;
+            animation: fadeUp 1.4s ease-out 0.9s forwards;
         }
 
-        .header .divider {
-            width: 200px;
-            height: 2px;
-            background: white;
-            margin: 30px auto;
-            animation: expandWidth 1.5s ease-out 0.6s backwards;
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeUp 1.4s ease-out 1.4s forwards;
         }
 
-        /* ========================================
-           LÍNEA DE TIEMPO CENTRAL
-           ======================================== */
+        .scroll-hint svg {
+            animation: bounce 2s infinite;
+        }
+
+        /* =============================================
+           LÍNEA CENTRAL (desktop) y LATERAL (móvil)
+           ============================================= */
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0;
+            padding: 0 20px;
             position: relative;
         }
 
+        /* Línea roja → ahora es dorada, visible siempre */
         .container::before {
             content: '';
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
             width: 1px;
-            background: linear-gradient(to bottom, 
-                transparent 0%, 
-                #c9b896 5%, 
-                #c9b896 95%, 
-                transparent 100%);
             top: 0;
             bottom: 0;
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                var(--dorado) 4%,
+                var(--dorado) 96%,
+                transparent 100%);
+            opacity: 0.35;
             z-index: 0;
         }
 
-        /* ========================================
-           SECCIONES CON ANIMACIONES
-           ======================================== */
+        /* =============================================
+           SECCIONES
+           ============================================= */
         .section {
-            margin: 100px 40px;
-            background: #ffffff;
-            border-radius: 0;
-            overflow: hidden;
-            box-shadow: 0 2px 30px rgba(0,0,0,0.06);
             position: relative;
             z-index: 2;
+            margin: 60px 0;
+            background: var(--blanco);
+            border: 1px solid var(--tierra-claro);
+            overflow: hidden;
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid #f0ede7;
+            transform: translateY(36px);
+            transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1);
         }
 
         .section.visible {
@@ -115,12 +183,23 @@
             transform: translateY(0);
         }
 
-        /* ========================================
-           ENCABEZADOS DE SECCIONES
-           ======================================== */
+        /* Acento de color en borde superior */
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--verde-medio), var(--dorado), var(--verde-medio));
+        }
+
+        /* =============================================
+           CABECERAS DE SECCIÓN
+           ============================================= */
         .section-header {
             position: relative;
-            height: 350px;
+            height: 280px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -130,310 +209,298 @@
         .section-header::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45));
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(30,45,30,0.3), rgba(20,35,20,0.55));
             z-index: 1;
         }
 
         .section-header h2 {
             position: relative;
             z-index: 2;
-            font-size: 3em;
-            color: white;
-            font-weight: 300;
-            text-align: center;
-            text-shadow: 2px 2px 20px rgba(0,0,0,0.4);
             font-family: 'Cormorant Garamond', Georgia, serif;
-            padding: 0 30px;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            font-size: 2.5em;
+            font-size: clamp(1.2em, 4vw, 2.1em);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--blanco);
+            text-align: center;
+            padding: 0 28px;
+            letter-spacing: 0.06em;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+            line-height: 1.3;
         }
 
-        /* Efecto parallax en headers con vídeo */
+        /* Ornamento inferior eliminado — más limpio */
+
+        /* Vídeo de fondo */
         .video-background {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             overflow: hidden;
             z-index: 0;
         }
 
         .video-background video {
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
             object-fit: cover;
         }
 
-        /* Fondos para secciones - paleta elegante y neutra */
-        .ceremonia-bg {
-            position: relative;
-            background-color: #e8e4dc;
-        }
+        /* Fondos de color cuando no hay vídeo */
+        .ceremonia-bg    { background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-medio)); }
+        .celebracion-bg  { background: linear-gradient(135deg, var(--madera), var(--tierra)); }
+        .confirmacion-bg { background: linear-gradient(135deg, var(--verde-medio), var(--verde-suave)); }
+        .alojamiento-bg  { background: linear-gradient(135deg, var(--tierra), var(--dorado)); }
+        .regalos-bg      { background: linear-gradient(135deg, var(--verde-oscuro), var(--madera)); }
+        .programa-bg     { background: linear-gradient(135deg, var(--madera), var(--verde-oscuro)); }
+        .parking-bg      { background: linear-gradient(135deg, var(--verde-suave), var(--verde-medio)); }
 
-        .celebracion-bg {
-            position: relative;
-            background-color: #e8e4dc;
-        }
-
-        .confirmacion-bg {
-            background: linear-gradient(135deg, #d4c5b0 0%, #a8977a 100%);
-        }
-
-        .alojamiento-bg {
-            background: linear-gradient(135deg, #b8a790 0%, #8a7766 100%);
-        }
-
-        .regalos-bg {
-            background: linear-gradient(135deg, #c9b896 0%, #9d8b6f 100%);
-        }
-
-        .programa-bg {
-            background: linear-gradient(135deg, #a89885 0%, #7d6e5d 100%);
-        }
-
-        .parking-bg {
-            background: linear-gradient(135deg, #d0c2ad 0%, #b09f89 100%);
-        }
-
-        /* ========================================
+        /* =============================================
            CONTENIDO DE SECCIONES
-           ======================================== */
+           ============================================= */
         .section-content {
-            padding: 60px 50px;
+            padding: 56px 48px;
         }
 
         .section-intro {
             text-align: center;
-            font-size: 1.15em;
-            color: #6b6b6b;
-            margin-bottom: 50px;
-            line-height: 1.9;
+            font-size: 1.05em;
+            color: var(--texto-suave);
+            margin-bottom: 44px;
+            line-height: 2;
             font-style: italic;
-            max-width: 700px;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.2em;
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
 
+        /* =============================================
+           INFO GRID (ubicación, horario)
+           ============================================= */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0;
+            margin-top: 36px;
+            border-top: 1px solid var(--tierra-claro);
         }
 
         .info-item {
             display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            padding: 30px;
-            background: #fafaf8;
-            border-radius: 0;
-            border-left: 3px solid #c9b896;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-top: 1px solid #f0ede7;
-            border-bottom: 1px solid #f0ede7;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 12px;
+            padding: 36px 28px;
+            border-right: 1px solid var(--tierra-claro);
+            border-bottom: 1px solid var(--tierra-claro);
+            transition: background 0.3s ease;
+        }
+
+        .info-item:last-child {
+            border-right: none;
         }
 
         .info-item:hover {
-            transform: translateX(5px);
-            background: #ffffff;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            background: var(--crema);
         }
 
         .info-item svg {
-            width: 28px;
-            height: 28px;
+            width: 20px;
+            height: 20px;
             flex-shrink: 0;
-            margin-top: 5px;
-            opacity: 0.7;
+            opacity: 0.45;
         }
 
         .info-item .text h3 {
-            font-size: 1.1em;
-            color: #8a7766;
-            margin-bottom: 12px;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.65em;
             font-weight: 500;
-            letter-spacing: 1px;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            font-size: 0.9em;
+            color: var(--verde-medio);
+            margin-bottom: 8px;
         }
 
         .info-item .text p {
-            color: #6b6b6b;
-            font-size: 1.1em;
-            line-height: 1.8;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            color: var(--texto);
+            font-size: 1.25em;
+            line-height: 1.5;
+            font-weight: 300;
         }
 
-        /* ========================================
-           BOTONES Y ENLACES - Diseño minimalista elegante
-           ======================================== */
+        /* =============================================
+           BOTONES
+           ============================================= */
         .button-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 16px;
             justify-content: center;
-            margin-top: 50px;
+            margin-top: 44px;
         }
 
         .map-link, .button {
-            display: inline-block;
-            padding: 16px 45px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 40px;
             background: transparent;
-            color: #8a7766;
+            color: var(--verde-oscuro);
             text-decoration: none;
-            border-radius: 0;
-            transition: all 0.3s ease;
-            font-size: 0.95em;
+            border: 1px solid var(--verde-medio);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.78em;
             font-weight: 400;
-            border: 2px solid #c9b896;
-            letter-spacing: 2px;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
+            transition: all 0.3s ease;
             cursor: pointer;
+            min-height: 52px;
         }
 
         .map-link:hover, .button:hover {
-            background: #c9b896;
-            color: #ffffff;
-            border-color: #c9b896;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(201, 184, 150, 0.2);
+            background: var(--verde-oscuro);
+            color: var(--blanco);
+            border-color: var(--verde-oscuro);
         }
 
         .button-secondary {
-            background: transparent;
-            color: #8a7766;
-            border: 2px solid #d4c5b0;
+            color: var(--madera);
+            border-color: var(--tierra);
         }
 
         .button-secondary:hover {
-            background: #d4c5b0;
-            color: #ffffff;
-            border-color: #d4c5b0;
+            background: var(--madera);
+            color: var(--blanco);
+            border-color: var(--madera);
         }
 
-        /* ========================================
-           SECCIÓN DE CONFIRMACIÓN
-           ======================================== */
+        /* =============================================
+           CONFIRMACIÓN
+           ============================================= */
         .confirm-box {
-            background: #fafaf8;
-            padding: 50px;
-            border-radius: 0;
             text-align: center;
-            max-width: 650px;
-            margin: 40px auto;
-            border: 1px solid #f0ede7;
+            max-width: 580px;
+            margin: 32px auto;
+            padding: 48px 40px;
+            border: 1px solid var(--tierra-claro);
+            background: var(--crema);
         }
 
         .confirm-box h3 {
-            font-size: 2em;
-            color: #2c2c2c;
-            margin-bottom: 25px;
             font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.9em;
             font-weight: 300;
-            letter-spacing: 2px;
+            color: var(--texto);
+            margin-bottom: 20px;
+            letter-spacing: 0.03em;
         }
 
         .confirm-box p {
-            color: #6b6b6b;
-            font-size: 1.05em;
-            margin-bottom: 25px;
+            color: var(--texto-suave);
+            font-size: 1em;
+            margin-bottom: 18px;
             line-height: 1.9;
         }
 
-        /* ========================================
-           LISTA DE HOTELES
-           ======================================== */
+        /* =============================================
+           HOTELES
+           ============================================= */
         .hotel-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            margin-top: 20px;
+            border-top: 1px solid var(--tierra-claro);
         }
 
         .hotel-card {
-            background: #fafaf8;
-            padding: 35px;
-            border-radius: 0;
-            border: 1px solid #f0ede7;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 36px 32px;
+            border-right: 1px solid var(--tierra-claro);
+            border-bottom: 1px solid var(--tierra-claro);
+            background: transparent;
+            transition: background 0.3s ease;
+            position: relative;
+        }
+
+        .hotel-card:last-child {
+            border-right: none;
         }
 
         .hotel-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-            border-color: #e8e4dc;
+            background: var(--crema);
         }
 
         .hotel-card h4 {
-            font-size: 1.4em;
-            color: #8a7766;
-            margin-bottom: 20px;
-            font-weight: 300;
-            letter-spacing: 1px;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.2em;
+            font-weight: 400;
+            color: var(--verde-oscuro);
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--tierra-claro);
         }
 
         .hotel-card p {
-            color: #6b6b6b;
-            margin-bottom: 12px;
+            color: var(--texto-suave);
+            margin-bottom: 8px;
             line-height: 1.7;
+            font-size: 0.9em;
         }
 
-        /* ========================================
-           SECCIÓN DE REGALOS
-           ======================================== */
+        .hotel-card p strong {
+            font-weight: 500;
+            color: var(--texto);
+            font-size: 0.7em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-family: 'Jost', sans-serif;
+        }
+
+        /* =============================================
+           REGALOS
+           ============================================= */
         .gift-box {
-            background: #fafaf8;
-            padding: 60px 50px;
-            border-radius: 0;
             text-align: center;
-            max-width: 700px;
-            margin: 40px auto;
-            border: 1px solid #f0ede7;
+            max-width: 620px;
+            margin: 32px auto;
+            padding: 56px 44px;
+            border: 1px solid var(--tierra-claro);
+            background: var(--crema);
         }
 
         .gift-icon {
-            font-size: 3em;
-            margin-bottom: 30px;
-            opacity: 0.6;
+            font-size: 2.5em;
+            margin-bottom: 24px;
+            opacity: 0.5;
         }
 
         .gift-box h3 {
-            font-size: 2em;
-            color: #2c2c2c;
-            margin-bottom: 25px;
             font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.9em;
             font-weight: 300;
-            letter-spacing: 2px;
+            color: var(--texto);
+            margin-bottom: 20px;
+            letter-spacing: 0.03em;
+            line-height: 1.3;
         }
 
         .gift-box p {
-            color: #6b6b6b;
-            font-size: 1.08em;
+            color: var(--texto-suave);
+            font-size: 1em;
             line-height: 1.9;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
-        /* ========================================
-           SECCIÓN DE PROGRAMA (con imagen)
-           ======================================== */
+        /* =============================================
+           PROGRAMA
+           ============================================= */
         .programa-image {
-            max-width: 800px;
-            margin: 30px auto;
-            border-radius: 15px;
+            max-width: 720px;
+            margin: 28px auto;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
         }
 
         .programa-image img {
@@ -443,151 +510,221 @@
         }
 
         .programa-placeholder {
-            background: white;
-            padding: 80px 40px;
+            background: var(--crema);
+            padding: 70px 32px;
             text-align: center;
-            color: #999;
+            color: var(--texto-suave);
             font-style: italic;
-            border: 2px dashed #ddd;
-            border-radius: 15px;
+            border: 1px dashed var(--tierra);
         }
 
-        /* ========================================
+        /* =============================================
            FOOTER
-           ======================================== */
+           ============================================= */
         footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            padding: 100px 20px;
-            background: linear-gradient(135deg, #a89885 0%, #7d6e5d 100%);
-            color: #ffffff;
-            font-size: 1.1em;
-            margin-top: 120px;
+            padding: 90px 24px;
+            background: var(--verde-oscuro);
+            color: var(--blanco);
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(184,154,90,0.25);
         }
+
+        /* Textura sutil en footer */
+        footer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(184,154,90,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(90,112,96,0.15) 0%, transparent 60%);
+        }
+
+        footer > * { position: relative; z-index: 1; }
 
         footer p {
-            margin: 18px 0;
-            opacity: 0.95;
+            margin: 14px 0;
+            opacity: 0.8;
+            font-size: 0.95em;
+            font-weight: 300;
+            letter-spacing: 0.08em;
         }
 
         footer .names {
-            font-size: 2.8em;
             font-family: 'Cormorant Garamond', Georgia, serif;
-            margin-top: 40px;
-            letter-spacing: 6px;
+            font-size: clamp(2em, 7vw, 3.2em);
             font-weight: 300;
+            font-style: italic;
+            letter-spacing: 0.08em;
+            color: var(--dorado-claro);
+            margin-top: 20px;
         }
 
         footer .heart {
-            font-size: 2em;
-            animation: heartbeat 1.5s infinite;
-            opacity: 0.8;
+            font-size: 1.6em;
+            animation: heartbeat 2s infinite;
+            opacity: 0.7;
+            margin-top: 8px;
         }
 
-        /* ========================================
+        footer .footer-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 28px 0;
+            opacity: 0.3;
+        }
+
+        footer .footer-divider span {
+            display: block;
+            width: 60px;
+            height: 1px;
+            background: var(--dorado-claro);
+        }
+
+        footer .footer-divider .dot {
+            width: 4px;
+            height: 4px;
+            background: var(--dorado-claro);
+            border-radius: 50%;
+        }
+
+        /* =============================================
            ANIMACIONES
-           ======================================== */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+           ============================================= */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes expandWidth {
-            from {
-                width: 0;
-            }
-            to {
-                width: 200px;
-            }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(8px); }
         }
 
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50%       { transform: scale(1.18); }
         }
 
-        /* ========================================
-           RESPONSIVE
-           ======================================== */
+        /* =============================================
+           RESPONSIVE — MÓVIL
+           ============================================= */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 3em;
-                letter-spacing: 6px;
+
+            .header::after { display: none; }
+
+            .section {
+                margin: 40px 0;
             }
 
-            .header .date {
-                font-size: 1.5em;
-            }
-            
             .section-header {
-                height: 250px;
+                height: 200px;
             }
 
+            /* FIX TÍTULOS LARGOS: sin letter-spacing agresivo en móvil */
             .section-header h2 {
-                font-size: 2.2em;
-            }
-            
-            .section-content {
-                padding: 40px 25px;
+                font-size: clamp(1.05em, 5vw, 1.5em);
+                letter-spacing: 0.02em;
+                padding: 0 20px;
             }
 
-            .info-grid, .hotel-list {
+            .section-content {
+                padding: 36px 22px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .info-item {
+                border-right: 1px solid var(--tierra-claro);
+            }
+
+            .info-item:nth-child(2n) {
+                border-right: none;
+            }
+
+            .hotel-list {
                 grid-template-columns: 1fr;
             }
 
-            .timeline {
-                display: none;
+            .hotel-card {
+                border-right: none;
             }
 
-            .container::before {
-                display: none;
+            .confirm-box,
+            .gift-box {
+                padding: 36px 20px;
+                margin: 16px 0;
+            }
+
+            .map-link, .button {
+                width: 100%;
+                padding: 16px 20px;
+                font-size: 0.75em;
             }
 
             .button-group {
                 flex-direction: column;
+                gap: 10px;
+            }
+
+            footer {
+                padding: 72px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container::before {
+                /* En móvil muy pequeño: línea lateral en vez de central */
+                left: 20px;
+                transform: none;
+            }
+
+            .section-header h2 {
+                font-size: clamp(1em, 4.5vw, 1.3em);
             }
         }
     </style>
 </head>
 <body>
-    <!-- ========================================
-         CABECERA PRINCIPAL
-         ======================================== -->
+
+    <!-- CABECERA -->
     <div class="header">
+        <div class="header-ornament">Os invitamos a nuestra boda</div>
         <h1>Iván y Minerva</h1>
-        <div class="divider"></div>
-        <div class="date">23 DE MAYO 2026</div>
+        <div class="header-divider">
+            <span></span>
+        </div>
+        <div class="date">23 de Mayo · 2026 · Toledo</div>
+        <div class="scroll-hint">
+            <svg width="20" height="32" viewBox="0 0 20 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1" y="1" width="18" height="30" rx="9" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+                <circle cx="10" cy="9" r="2.5" fill="rgba(255,255,255,0.7)">
+                    <animateTransform attributeName="transform" type="translate" values="0,0;0,10;0,0" dur="2s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+        </div>
     </div>
 
     <div class="container">
-        <!-- ========================================
-             SECCIÓN 1: CEREMONIA
-             ======================================== -->
+
+        <!-- SECCIÓN 1: CEREMONIA -->
         <div class="section">
             <div class="section-header ceremonia-bg">
                 <div class="video-background">
                     <video autoplay muted loop playsinline>
-                        <!-- CAMBIA AQUÍ la ruta de tu vídeo de la iglesia -->
-                        <source src="videos/caridad.mp4" type="video/mp4">
+                        <source src="https://res.cloudinary.com/dtedobwme/video/upload/q_auto/f_auto/v1777019304/caridad_sq0lol.mp4">
                     </video>
                 </div>
-                <h2 style="position: relative; z-index: 2;">Santuario de Nuestra Señora de la Caridad</h2>
+                <h2>Santuario de Nuestra Señora de la Caridad</h2>
             </div>
             <div class="section-content">
                 <p class="section-intro">
@@ -595,7 +732,7 @@
                 </p>
                 <div class="info-grid">
                     <div class="info-item">
-                        <svg fill="#d4af37" viewBox="0 0 24 24">
+                        <svg fill="#b89a5a" viewBox="0 0 24 24">
                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                         </svg>
                         <div class="text">
@@ -604,12 +741,12 @@
                         </div>
                     </div>
                     <div class="info-item">
-                        <svg fill="#d4af37" viewBox="0 0 24 24">
+                        <svg fill="#b89a5a" viewBox="0 0 24 24">
                             <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                         </svg>
                         <div class="text">
                             <h3>Horario</h3>
-                            <p>12:00h.</p>
+                            <p>12:00 h.</p>
                         </div>
                     </div>
                 </div>
@@ -619,18 +756,15 @@
             </div>
         </div>
 
-        <!-- ========================================
-             SECCIÓN 2: CELEBRACIÓN
-             ======================================== -->
+        <!-- SECCIÓN 2: CELEBRACIÓN -->
         <div class="section">
             <div class="section-header celebracion-bg">
                 <div class="video-background">
                     <video autoplay muted loop playsinline>
-                        <!-- CAMBIA AQUÍ la ruta de tu vídeo de la hacienda -->
-                        <source src="videos/hacienda.mp4" type="video/mp4">
+                        <source src="https://res.cloudinary.com/dtedobwme/video/upload/q_auto/f_auto/v1777019282/hacienda_rqa2x4.mp4">
                     </video>
                 </div>
-                <h2 style="position: relative; z-index: 2;">La Hacienda del Marqués</h2>
+                <h2>La Hacienda del Marqués</h2>
             </div>
             <div class="section-content">
                 <p class="section-intro">
@@ -638,7 +772,7 @@
                 </p>
                 <div class="info-grid">
                     <div class="info-item">
-                        <svg fill="#d4af37" viewBox="0 0 24 24">
+                        <svg fill="#b89a5a" viewBox="0 0 24 24">
                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                         </svg>
                         <div class="text">
@@ -647,12 +781,12 @@
                         </div>
                     </div>
                     <div class="info-item">
-                        <svg fill="#d4af37" viewBox="0 0 24 24">
+                        <svg fill="#b89a5a" viewBox="0 0 24 24">
                             <path d="M18.06 23h1.66c.84 0 1.53-.65 1.63-1.47L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 2.89 2.43 5.29V23zM1 22v-1h15.03v1c0 .54-.45 1-1.03 1H2c-.55 0-1-.46-1-1zm15.03-7C16.03 7 1 7 1 15h15.03zM1 17h15v2H1z"/>
                         </svg>
                         <div class="text">
                             <h3>Horario</h3>
-                            <p>14:00h</p>
+                            <p>14:00 h.</p>
                         </div>
                     </div>
                 </div>
@@ -662,9 +796,7 @@
             </div>
         </div>
 
-        <!-- ========================================
-             SECCIÓN 3: CONFIRMACIÓN DE ASISTENCIA
-             ======================================== -->
+        <!-- SECCIÓN 3: CONFIRMACIÓN -->
         <div class="section">
             <div class="section-header confirmacion-bg">
                 <h2>Confirmación de Asistencia</h2>
@@ -674,16 +806,16 @@
                     <h3>¿Contamos contigo?</h3>
                     <p>Por favor, confirma tu asistencia antes del <strong>1 de mayo de 2026</strong>.</p>
                     <p>Te agradeceríamos que nos indicases si tienes alguna alergia o intolerancia alimentaria.</p>
-                    <a href="https://forms.gle/TU_ENLACE_DE_GOOGLE_FORMS" target="_blank" class="button">
-                        ✉️ Confirmar asistencia
-                    </a>
+                    <div class="button-group" style="margin-top: 32px;">
+                        <a href="https://forms.gle/TU_ENLACE_DE_GOOGLE_FORMS" target="_blank" class="button">
+                            ✉️ Confirmar asistencia
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ========================================
-             SECCIÓN 4: ALOJAMIENTO
-             ======================================== -->
+        <!-- SECCIÓN 4: ALOJAMIENTO -->
         <div class="section">
             <div class="section-header alojamiento-bg">
                 <h2>Alojamiento</h2>
@@ -693,35 +825,32 @@
                     Si necesitas alojamiento, aquí te dejamos algunas opciones cercanas.
                 </p>
                 <div class="hotel-list">
-                    <!-- PERSONALIZA AQUÍ tus hoteles recomendados -->
                     <div class="hotel-card">
                         <h4>🏨 Hotel Real de Illescas</h4>
                         <p><strong>Dirección:</strong> Pl. Hermanos Fernández Criado, 45200 Illescas, Toledo</p>
                         <p><strong>Distancia:</strong> 100 m.</p>
                         <p><strong>Teléfono:</strong> 925 54 16 99</p>
-                        <a href="http://www.hotelrealillescas.es/" target="_blank" class="button button-secondary" style="margin-top: 15px; display: inline-block; padding: 12px 25px; font-size: 0.95em;">Ver más info</a>
+                        <a href="http://www.hotelrealillescas.es/" target="_blank" class="button button-secondary" style="margin-top: 18px; display: inline-flex; padding: 12px 24px; font-size: 0.75em;">Ver más info</a>
                     </div>
                     <div class="hotel-card">
                         <h4>🏨 Hotel Carlos I</h4>
                         <p><strong>Dirección:</strong> Pol. Ind. Villa de Yuncos, C. Carlos I, 51, 45210 Yuncos, Toledo</p>
                         <p><strong>Distancia:</strong> 8 km.</p>
                         <p><strong>Teléfono:</strong> 925 55 79 19</p>
-                        <a href="https://www.hotelcarlos1.com/" target="_blank" class="button button-secondary" style="margin-top: 15px; display: inline-block; padding: 12px 25px; font-size: 0.95em;">Ver más info</a>
+                        <a href="https://www.hotelcarlos1.com/" target="_blank" class="button button-secondary" style="margin-top: 18px; display: inline-flex; padding: 12px 24px; font-size: 0.75em;">Ver más info</a>
                     </div>
                     <div class="hotel-card">
-                        <h4>🏨 HOSTAL 82</h4>
-                        <p><strong>Dirección:</strong> A-42 SALIDA 59 SENTIDO MADRID Via de Servicio, 45280, Toledo</p>
+                        <h4>🏨 Hostal 82</h4>
+                        <p><strong>Dirección:</strong> A-42 salida 59 sentido Madrid, vía de servicio, 45280, Toledo</p>
                         <p><strong>Distancia:</strong> 10 km.</p>
                         <p><strong>Teléfono:</strong> 925 09 30 65</p>
-                        <a href="http://www.hostal82.com/" target="_blank" class="button button-secondary" style="margin-top: 15px; display: inline-block; padding: 12px 25px; font-size: 0.95em;">Ver más info</a>
+                        <a href="http://www.hostal82.com/" target="_blank" class="button button-secondary" style="margin-top: 18px; display: inline-flex; padding: 12px 24px; font-size: 0.75em;">Ver más info</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ========================================
-             SECCIÓN 5: REGALOS
-             ======================================== -->
+        <!-- SECCIÓN 5: REGALOS -->
         <div class="section">
             <div class="section-header regalos-bg">
                 <h2>Regalos</h2>
@@ -732,43 +861,33 @@
                     <h3>Vuestra compañía es nuestro mejor regalo</h3>
                     <p>Lo más importante para nosotros es compartir este día tan especial con vosotros.</p>
                     <p>Si aun así deseáis hacernos un regalo, agradeceríamos una aportación para nuestra luna de miel.</p>
-                    <!-- OPCIONAL: Añade aquí el número de cuenta o enlace a lista de bodas -->
-                    <p style="margin-top: 25px; font-size: 1em; color: #999;">
-                        <em>Podéis hacerlo llegar el día de la boda o contactar con nosotros.</em>
+                    <p style="margin-top: 20px; font-size: 0.92em; color: #999; font-style: italic;">
+                        Podéis hacerlo llegar el día de la boda o contactar con nosotros.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- ========================================
-             SECCIÓN 6: PROGRAMA DEL DÍA
-             ======================================== -->
+        <!-- SECCIÓN 6: PROGRAMA -->
         <div class="section">
             <div class="section-header programa-bg">
                 <h2>Programa del Día</h2>
             </div>
             <div class="section-content">
-                <p class="section-intro">
-                    Así transcurrirá nuestro gran día. ¡No te lo pierdas!
-                </p>
-                <!-- Aquí puedes poner tu imagen del timeline -->
+                <p class="section-intro">Así transcurrirá nuestro gran día. ¡No te lo pierdas!</p>
                 <div class="programa-image">
-                    <!-- OPCIÓN 1: Si tienes una imagen del programa, descomenta esto y cambia la ruta:
+                    <!-- Descomenta cuando tengas la imagen:
                     <img src="imagenes/programa.jpg" alt="Programa del día">
                     -->
-                    
-                    <!-- OPCIÓN 2: Placeholder temporal (elimínalo cuando tengas la imagen) -->
                     <div class="programa-placeholder">
-                        <p style="font-size: 1.2em;">📸 Aquí irá vuestra imagen del timeline del día</p>
-                        <p style="margin-top: 15px; font-size: 0.95em;">Guarda tu imagen como "imagenes/programa.jpg" y descomenta la línea correspondiente en el HTML</p>
+                        <p style="font-size: 1.1em;">📸 Aquí irá vuestra imagen del timeline del día</p>
+                        <p style="margin-top: 12px; font-size: 0.9em;">Guarda tu imagen como <code>imagenes/programa.jpg</code> y descomenta la línea en el HTML</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ========================================
-             SECCIÓN 7: APARCAMIENTO
-             ======================================== -->
+        <!-- SECCIÓN 7: APARCAMIENTO -->
         <div class="section">
             <div class="section-header parking-bg">
                 <h2>Aparcamiento</h2>
@@ -777,72 +896,38 @@
                 <div class="confirm-box">
                     <h3>🅿️ Dónde aparcar</h3>
                     <p>Tanto el Santuario como La Hacienda del Marqués disponen de aparcamiento gratuito.</p>
-                    <p style="margin-top: 20px; color: #999; font-size: 0.95em;">
-                        <em>Más información disponible próximamente.</em>
+                    <p style="margin-top: 16px; color: #aaa; font-size: 0.92em; font-style: italic;">
+                        Más información disponible próximamente.
                     </p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- ========================================
-         FOOTER
-         ======================================== -->
+    </div><!-- /container -->
+
+    <!-- FOOTER -->
     <footer>
         <p>¡Nos hace muchísima ilusión celebrarlo con vosotros!</p>
-        <p class="heart">❤️</p>
-        <p class="names">Iván & Minerva</p>
-        <p style="margin-top: 30px; font-size: 0.9em; opacity: 0.8;">23 de Mayo, 2026</p>
+        <div class="footer-divider">
+            <span></span><div class="dot"></div><span></span>
+        </div>
+        <div class="heart">❤️</div>
+        <div class="names">Iván & Minerva</div>
+        <p style="margin-top: 32px; font-size: 0.82em; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5;">23 de Mayo, 2026</p>
     </footer>
 
-    <!-- ========================================
-         JAVASCRIPT PARA ANIMACIONES AL SCROLL
-         ======================================== -->
     <script>
         // Animación de aparición al hacer scroll
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
 
-        // Observar todas las secciones
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => observer.observe(section));
-        });
+        document.querySelectorAll('.section').forEach(s => observer.observe(s));
     </script>
 
-    <!-- ========================================
-         INSTRUCCIONES PARA PERSONALIZAR:
-         
-         ✅ VÍDEOS: 
-         - Ceremonia: busca <source src="videos/caridad.mp4"
-         - Celebración: busca <source src="videos/hacienda.mp4"
-         
-         ✅ CONFIRMACIÓN DE ASISTENCIA:
-         - Busca "TU_ENLACE_DE_GOOGLE_FORMS" y cambia el enlace
-         
-         ✅ HOTELES:
-         - Busca "Hotel 1", "Hotel 2", "Hotel 3" y personaliza
-         
-         ✅ REGALOS:
-         - Personaliza el mensaje según vuestras preferencias
-         
-         ✅ PROGRAMA DEL DÍA:
-         - Guarda tu imagen como "imagenes/programa.jpg"
-         - Descomenta la línea: <img src="imagenes/programa.jpg"
-         
-         ✅ APARCAMIENTO:
-         - Añade información específica de aparcamiento
-         
-         ======================================== -->
 </body>
 </html>
