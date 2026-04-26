@@ -1351,11 +1351,14 @@
                     <p>Por favor, confirma tu asistencia antes del <strong>7 de mayo de 2026</strong>.</p>
                     <p>Si tienes alguna alergia o intolerancia alimentaria, indícala en el formulario.</p>
 
-                    <!-- Formulario — sustituye TUCODIGO por el de formspree.io/f/TUCODIGO -->
+                    <!-- Formulario de confirmación de asistencia -->
                     <form class="confirm-form" id="confirmForm"
-                          action="https://formspree.io/f/TUCODIGO"
+                          action="https://formspree.io/f/xojybgvq"
                           method="POST"
                           onsubmit="handleFormSubmit(event)">
+
+                        <input type="hidden" name="_subject" value="Nueva confirmación de asistencia — Iván y Minerva">
+                        <input type="hidden" name="_language" value="es">
 
                         <div class="form-cols">
                             <div class="form-row">
@@ -1605,14 +1608,20 @@
                     headers: { 'Accept': 'application/json' }
                 });
 
+                const data = await res.json().catch(() => ({}));
+
                 if (res.ok) {
                     form.style.display = 'none';
                     document.getElementById('formSuccess').style.display = 'block';
                 } else {
-                    throw new Error();
+                    // Formspree devuelve errors[] con el motivo
+                    const msg = data.errors?.map(e => e.message).join(', ')
+                                || 'Error al enviar. Por favor, inténtalo de nuevo.';
+                    btn.textContent = msg;
+                    btn.disabled = false;
                 }
-            } catch {
-                btn.textContent = 'Error al enviar. Inténtalo de nuevo.';
+            } catch (err) {
+                btn.textContent = 'Sin conexión. Inténtalo de nuevo.';
                 btn.disabled = false;
             }
         }
