@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iván y Minerva · 23 de Mayo 2026</title>
+    <meta name="description" content="Os invitamos a nuestra boda el 23 de mayo de 2026 en Illescas, Toledo. Toda la información sobre la ceremonia, celebración y alojamiento.">
+    <!-- Open Graph: previsualización al compartir por WhatsApp, etc. -->
+    <meta property="og:title"       content="Iván y Minerva · 23 de Mayo 2026">
+    <meta property="og:description" content="Os invitamos a nuestra boda el 23 de mayo de 2026 en Illescas, Toledo.">
+    <meta property="og:type"        content="website">
+    <meta name="theme-color"        content="#3b4a3f">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -682,28 +688,31 @@
             font-family: 'Jost', sans-serif;
         }
 
-        /* ─── Sello LLENO ─── */
+        /* ─── Sello SIN DISPONIBILIDAD ─── */
         .hotel-card.sold-out {
-            opacity: 0.72;
+            opacity: 0.70;
+            overflow: hidden; /* el sello no se desborda fuera de la tarjeta */
         }
         .hotel-card.sold-out::after {
-            content: 'SIN DISPONIBILIDAD';
+            content: 'SIN\ADISPONIBILIDAD';
+            white-space: pre;           /* respeta el salto \A */
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-28deg);
             font-family: 'Jost', sans-serif;
-            font-size: 1.55em;
+            font-size: 1.05em;
             font-weight: 500;
-            letter-spacing: 0.22em;
+            letter-spacing: 0.18em;
+            text-align: center;
+            line-height: 1.35;
             color: #c0392b;
-            border: 2.5px solid #c0392b;
-            padding: 6px 18px;
+            border: 2px solid #c0392b;
+            padding: 8px 16px;
             border-radius: 4px;
-            opacity: 0.82;
+            opacity: 0.85;
             pointer-events: none;
-            white-space: nowrap;
-            box-shadow: inset 0 0 0 1px rgba(192,57,43,0.15);
+            box-shadow: inset 0 0 0 1px rgba(192,57,43,0.12);
         }
         .gift-box {
             text-align: center;
@@ -737,9 +746,137 @@
             margin-bottom: 16px;
         }
 
-        /* =============================================
-           PROGRAMA
-           ============================================= */
+        /* Botón secundario pequeño para tarjetas de hotel */
+        .button-secondary.button-sm {
+            margin-top: 18px;
+            display: inline-flex;
+            padding: 12px 24px;
+            font-size: 0.75em;
+        }
+
+
+        /* ─── Revelador de cuenta bancaria ─── */
+        .iban-revealer {
+            margin: 36px auto 0;
+            max-width: 540px;
+            text-align: center;
+        }
+
+        .iban-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            border: 1px solid var(--tierra-claro);
+            color: var(--texto-suave);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.72em;
+            font-weight: 400;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 13px 28px;
+            cursor: pointer;
+            transition: border-color 0.3s ease, color 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .iban-toggle:hover {
+            border-color: var(--dorado);
+            color: var(--dorado);
+        }
+
+        .iban-toggle svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+            flex-shrink: 0;
+        }
+
+        .iban-toggle.open svg { transform: rotate(180deg); }
+
+        .iban-panel {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity   0.45s ease;
+        }
+
+        .iban-panel.open {
+            max-height: 320px;
+            opacity: 1;
+        }
+
+        .iban-inner {
+            margin-top: 16px;
+            border: 1px solid var(--tierra-claro);
+            background: var(--crema-oscura);
+            text-align: left;
+            overflow: hidden;
+        }
+
+        .iban-row {
+            padding: 22px 32px;
+        }
+
+        .iban-row + .iban-row {
+            border-top: 1px solid var(--tierra-claro);
+        }
+
+        .iban-label {
+            font-size: 0.62em;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--texto-suave);
+            margin-bottom: 8px;
+        }
+
+        .iban-value {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.15em;
+            font-weight: 400;
+            color: var(--texto);
+            letter-spacing: 0.03em;
+            line-height: 1.5;
+        }
+
+        .iban-value--mono {
+            font-family: 'Courier New', 'Courier', monospace;
+            font-size: 1.05em;
+            letter-spacing: 0.08em;
+            color: var(--verde-oscuro);
+        }
+
+        .iban-footer {
+            padding: 14px 32px;
+            border-top: 1px solid var(--tierra-claro);
+            display: flex;
+            justify-content: flex-end;
+            background: rgba(0,0,0,0.018);
+        }
+
+        .iban-copy {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: transparent;
+            border: none;
+            color: var(--texto-suave);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.68em;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 4px 0;
+            transition: color 0.25s;
+            touch-action: manipulation;
+        }
+
+        .iban-copy:hover  { color: var(--dorado); }
+        .iban-copy.copied { color: var(--verde-medio); }
+
+
         .programa-image {
             max-width: 720px;
             margin: 28px auto;
@@ -1023,7 +1160,7 @@
                     </div>
                 </div>
                 <div class="button-group">
-                    <a href="https://www.google.com/maps/search/?api=1&query=Santuario+Nuestra+Señora+de+la+Caridad+Illescas" target="_blank" class="map-link">📍 Cómo llegar</a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Santuario+Nuestra+Señora+de+la+Caridad+Illescas" target="_blank" rel="noopener noreferrer" class="map-link">📍 Cómo llegar</a>
                 </div>
             </div>
         </div>
@@ -1063,7 +1200,7 @@
                     </div>
                 </div>
                 <div class="button-group">
-                    <a href="https://www.google.com/maps/search/?api=1&query=La+Hacienda+del+Marqués+Bargas" target="_blank" class="map-link">📍 Cómo llegar</a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=La+Hacienda+del+Marqués+Bargas" target="_blank" rel="noopener noreferrer" class="map-link">📍 Cómo llegar</a>
                 </div>
             </div>
         </div>
@@ -1079,7 +1216,7 @@
                     <p>Por favor, confirma tu asistencia antes del 7 de mayo de 2026.</p>
                     <p>Te agradeceríamos que nos indicases si tienes <strong>alguna alergia o intolerancia alimentaria</strong>.</p>
                     <div class="button-group" style="margin-top: 32px;">
-                        <a href="https://forms.gle/TU_ENLACE_DE_GOOGLE_FORMS" target="_blank" class="button">
+                        <a href="https://forms.gle/TU_ENLACE_DE_GOOGLE_FORMS" target="_blank" rel="noopener noreferrer" class="button">
                             ✉️ Confirmar asistencia
                         </a>
                     </div>
@@ -1101,21 +1238,21 @@
                         <p><strong>Dirección:</strong> Pl. Hermanos Fernández Criado, 45200 Illescas, Toledo</p>
                         <p><strong>Distancia:</strong> 100 m.</p>
                         <p><strong>Teléfono:</strong> 925 54 16 99</p>
-                        <a href="http://www.hotelrealillescas.es/" target="_blank" class="button button-secondary" style="margin-top: 18px; display: inline-flex; padding: 12px 24px; font-size: 0.75em;">Ver más info</a>
+                        <a href="http://www.hotelrealillescas.es/" target="_blank" rel="noopener noreferrer" class="button button-secondary button-sm">Ver más info</a>
                     </div>
                     <div class="hotel-card">
                         <h4>🏨 Hotel Carlos I</h4>
                         <p><strong>Dirección:</strong> Pol. Ind. Villa de Yuncos, C. Carlos I, 51, 45210 Yuncos, Toledo</p>
                         <p><strong>Distancia:</strong> 8 km.</p>
                         <p><strong>Teléfono:</strong> 925 55 79 19</p>
-                        <a href="https://www.hotelcarlos1.com/" target="_blank" class="button button-secondary" style="margin-top: 18px; display: inline-flex; padding: 12px 24px; font-size: 0.75em;">Ver más info</a>
+                        <a href="https://www.hotelcarlos1.com/" target="_blank" rel="noopener noreferrer" class="button button-secondary button-sm">Ver más info</a>
                     </div>
                     <div class="hotel-card">
                         <h4>🏨 Hostal 82</h4>
                         <p><strong>Dirección:</strong> A-42 salida 59 sentido Madrid, vía de servicio, 45280, Toledo</p>
                         <p><strong>Distancia:</strong> 10 km.</p>
                         <p><strong>Teléfono:</strong> 925 09 30 65</p>
-                        <a href="http://www.hostal82.com/" target="_blank" class="button button-secondary" style="margin-top: 18px; display: inline-flex; padding: 12px 24px; font-size: 0.75em;">Ver más info</a>
+                        <a href="http://www.hostal82.com/" target="_blank" rel="noopener noreferrer" class="button button-secondary button-sm">Ver más info</a>
                     </div>
                 </div>
             </div>
@@ -1154,10 +1291,37 @@
                     </div>
                     <h3>Vuestra compañía es nuestro mejor regalo</h3>
                     <p>Lo más importante para nosotros es compartir este día tan especial con vosotros.</p>
-                    <p>Si aun así deseáis hacernos un regalo, agradeceríamos una aportación para nuestra luna de miel.</p>
-                    <p style="margin-top: 20px; font-size: 0.92em; color: #999; font-style: italic;">
-                        Podéis hacerlo llegar el día de la boda o contactar con nosotros.
-                    </p>
+                    <p>Si aun así deseáis hacernos un regalo, podéis hacerlo llegar el día de la boda, contactar con nosotros o deslizar aquí abajo.</p>
+
+                    <!-- Revelador de cuenta bancaria -->
+                    <div class="iban-revealer">
+                        <button class="iban-toggle" id="ibanToggle" onclick="toggleIban()" aria-expanded="false">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                            Cuenta bancaria
+                        </button>
+                        <div class="iban-panel" id="ibanPanel" role="region" aria-labelledby="ibanToggle">
+                            <div class="iban-inner">
+                                <div class="iban-row">
+                                    <div class="iban-label">Beneficiarios</div>
+                                    <div class="iban-value">Iván Molina Rincón &amp; Minerva Acuña Ruiz</div>
+                                </div>
+                                <div class="iban-row">
+                                    <div class="iban-label">Número de cuenta</div>
+                                    <div class="iban-value iban-value--mono" id="ibanNumber">ES89 1583 0001 1691 5737 7663</div>
+                                </div>
+                                <div class="iban-footer">
+                                    <button class="iban-copy" id="ibanCopy" onclick="copyIban()">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                        </svg>
+                                        <span>Copiar IBAN</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1207,7 +1371,7 @@
         </div>
         <div class="heart">❤️</div>
         <div class="names">Iván & Minerva</div>
-        <p style="margin-top: 32px; font-size: 0.82em; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5;">23 de Mayo, 2026</p>
+        <p style="margin-top: 32px; font-size: 0.82em; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5;">23 · V · 2026</p>
     </footer>
 
     <script>
@@ -1230,6 +1394,43 @@
         }, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
 
         document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+        // ── Revelador de cuenta bancaria ────────────────────────────────
+        function toggleIban() {
+            const panel  = document.getElementById('ibanPanel');
+            const toggle = document.getElementById('ibanToggle');
+            const open   = panel.classList.toggle('open');
+            toggle.classList.toggle('open', open);
+            toggle.setAttribute('aria-expanded', open);
+        }
+
+        function copyIban() {
+            const iban = document.getElementById('ibanNumber').textContent.trim();
+            const btn  = document.getElementById('ibanCopy');
+            const span = btn.querySelector('span');
+
+            const confirm = () => {
+                btn.classList.add('copied');
+                span.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    span.textContent = 'Copiar IBAN';
+                }, 2200);
+            };
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(iban).then(confirm);
+            } else {
+                // Fallback para navegadores sin clipboard API
+                const ta = document.createElement('textarea');
+                ta.value = iban;
+                ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+                document.body.appendChild(ta);
+                ta.focus(); ta.select();
+                try { document.execCommand('copy'); confirm(); } catch(e) {}
+                document.body.removeChild(ta);
+            }
+        }
 
         // ── Regalo interactivo ──────────────────────────────────────────
         const PARTICLES = ['🌸','✨','💛','🌿','⭐','🌼','✦','🎀','💚','🌷'];
