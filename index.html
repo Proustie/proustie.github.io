@@ -13,8 +13,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- display=optional: no bloquea el renderizado; si la fuente llega tarde, usa fallback -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=optional" rel="stylesheet">
+    <!-- display=swap: garantiza que Cormorant Garamond siempre se aplica -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
         /* =============================================
@@ -1348,12 +1348,12 @@
             <div class="section-content">
                 <div class="confirm-box">
                     <h3>¿Contamos contigo?</h3>
-                    <p>Por favor, confirma tu asistencia antes del 7 de mayo de 2026.</p>
-                    <p><strong>Si tienes alguna alergia o intolerancia alimentaria, indícala en el formulario</strong>.</p>
+                    <p>Por favor, confirma tu asistencia antes del <strong>7 de mayo de 2026</strong>.</p>
+                    <p>Si tienes alguna alergia o intolerancia alimentaria, indícala en el formulario.</p>
 
-                    
+                    <!-- Formulario — sustituye TUCODIGO por el de formspree.io/f/TUCODIGO -->
                     <form class="confirm-form" id="confirmForm"
-                          action="https://formspree.io/f/xojybgvq"
+                          action="https://formspree.io/f/TUCODIGO"
                           method="POST"
                           onsubmit="handleFormSubmit(event)">
 
@@ -1484,7 +1484,7 @@
                         <p>🌿 ¡Gracias por vuestro cariño! 🌿</p>
                     </div>
                     <h3>Vuestra compañía es nuestro mejor regalo</h3>
-                    <p><strong>Lo más importante para nosotros es compartir este día tan especial con vosotros</strong>.</p>
+                    <p>Lo más importante para nosotros es compartir este día tan especial con vosotros.</p>
                     <p>Si aun así deseáis hacernos un regalo, podéis hacerlo llegar el día de la boda, contactar con nosotros o deslizar aquí abajo.</p>
 
                     <!-- Revelador de cuenta bancaria -->
