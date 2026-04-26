@@ -7,7 +7,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- display=optional: no bloquea el renderizado; si la fuente llega tarde, usa fallback -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=optional" rel="stylesheet">
 
     <style>
         /* =============================================
@@ -296,155 +297,182 @@
             background: var(--crema);
         }
 
-        /* Contenedor del regalo interactivo */
+        /* Wrapper que levita — separado del hitbox */
+        .gift-wrapper {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 44px;
+            animation: float-gift 3.2s ease-in-out infinite;
+        }
+
+        .gift-wrapper.shake {
+            animation: shake-gift 0.5s ease;
+        }
+
+        @keyframes float-gift {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            40%       { transform: translateY(-10px) rotate(-1deg); }
+            65%       { transform: translateY(-7px) rotate(0.8deg); }
+        }
+
+        @keyframes shake-gift {
+            0%,100% { transform: rotate(0deg) translateY(0); }
+            20%     { transform: rotate(-7deg) translateY(-4px); }
+            40%     { transform: rotate(7deg) translateY(-6px); }
+            60%     { transform: rotate(-4deg) translateY(-3px); }
+            80%     { transform: rotate(3deg) translateY(-1px); }
+        }
+
+        /* Hitbox circular */
         .gift-interactive {
             position: relative;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            margin-bottom: 28px;
             user-select: none;
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            transition: background 0.3s ease, transform 0.2s ease;
+            /* overflow: visible es clave — la tapa sale hacia arriba */
+            overflow: visible;
         }
 
-        /* Hitbox circular visible solo en hover */
         .gift-interactive::before {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(90,112,96,0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(90,112,96,0.1) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
-        .gift-interactive:hover::before {
-            opacity: 1;
-        }
+        .gift-interactive:hover::before { opacity: 1; }
+        .gift-interactive:active { transform: scale(0.93); transition: transform 0.1s; }
 
-        .gift-interactive:active {
-            transform: scale(0.94);
-        }
-
-        .gift-interactive:hover .gift-lid {
-            transform: rotate(-28deg) translateY(-16px) translateX(5px);
-        }
-
-        .gift-interactive.opened .gift-lid {
-            transform: rotate(-38deg) translateY(-24px) translateX(10px);
-        }
-
-        /* Caja SVG */
+        /* SVG — overflow visible para que la tapa no se corte */
         .gift-svg {
-            width: 90px;
-            height: 90px;
-            display: block;
-            filter: drop-shadow(0 4px 12px rgba(59,74,63,0.18));
+            width: 100px;
+            height: 100px;
+            overflow: visible;
+            filter: drop-shadow(0 6px 14px rgba(59,74,63,0.2));
         }
 
         .gift-lid {
-            transform-origin: 14px 26px;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: 40px 33px;  /* borde inferior de la tapa = punto de bisagra */
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* Float suave cuando no está abierto */
-        .gift-interactive:not(.opened) .gift-svg {
-            animation: float-gift 3.2s ease-in-out infinite;
+        .gift-interactive:hover:not(.opened) .gift-lid {
+            transform: rotate(-18deg) translateY(-4px);
         }
 
-        @keyframes float-gift {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            40%       { transform: translateY(-8px) rotate(-1deg); }
-            60%       { transform: translateY(-6px) rotate(1deg); }
+        /* Tapa vuela al abrir — fill:forwards la mantiene fuera de vista */
+        .gift-interactive.opened .gift-lid {
+            animation: lid-fly 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+            transition: none;
         }
 
-        /* Sacudida cuando ya está abierto y se toca */
-        .gift-interactive.shake .gift-svg {
-            animation: shake-gift 0.5s ease;
+        @keyframes lid-fly {
+            0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            15%  { transform: translateY(-18px) rotate(-8deg) scale(1.05); opacity: 1; }
+            55%  { transform: translateY(-90px) rotate(-25deg) scale(0.9); opacity: 0.8; }
+            100% { transform: translateY(-160px) rotate(-45deg) scale(0.6); opacity: 0; }
         }
 
-        @keyframes shake-gift {
-            0%,100% { transform: rotate(0deg); }
-            20%     { transform: rotate(-6deg) translateY(-3px); }
-            40%     { transform: rotate(6deg) translateY(-5px); }
-            60%     { transform: rotate(-4deg) translateY(-2px); }
-            80%     { transform: rotate(3deg); }
-        }
-
-        /* Destellos — fuera del hitbox para que no interfieran */
-        .gift-sparkles {
+        /* ─── Partículas que salen del interior de la caja ─── */
+        .gift-particles {
             position: absolute;
-            inset: -20px;
+            /* centro aproximado de la apertura de la caja en coordenadas SVG */
+            top: 28%;        /* justo en el borde superior del cuerpo */
+            left: 50%;
+            width: 0;
+            height: 0;
             pointer-events: none;
-            border-radius: 50%;
+            overflow: visible;
+            z-index: 10;
         }
 
-        .gift-sparkles span {
+        .gift-particle {
             position: absolute;
-            font-size: 1.05em;
+            font-size: 1.1em;
             opacity: 0;
             transform: translate(-50%, -50%);
+            will-change: transform, opacity;
         }
 
-        .gift-sparkles span:nth-child(1) { top: 5%;  left: 50%; }
-        .gift-sparkles span:nth-child(2) { top: 15%; right: 5%; left: auto; }
-        .gift-sparkles span:nth-child(3) { top: 15%; left: 5%; }
-        .gift-sparkles span:nth-child(4) { top: 0%;  left: 30%; }
-        .gift-sparkles span:nth-child(5) { top: 10%; left: 70%; }
+        /* Destellos decorativos legacy — eliminados, reemplazados por JS */
+        .gift-sparkles { display: none; }
 
-        .gift-sparkles.firing span {
-            animation: sparkle-out 0.75s ease-out forwards;
-        }
-
-        .gift-sparkles.firing span:nth-child(1) { animation-delay: 0s; }
-        .gift-sparkles.firing span:nth-child(2) { animation-delay: 0.07s; }
-        .gift-sparkles.firing span:nth-child(3) { animation-delay: 0.13s; }
-        .gift-sparkles.firing span:nth-child(4) { animation-delay: 0.05s; }
-        .gift-sparkles.firing span:nth-child(5) { animation-delay: 0.18s; }
-
-        @keyframes sparkle-out {
-            0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, calc(-50% - 32px)) scale(0.4); }
-        }
-
-        /* Mensaje que aparece al abrir */
-        .gift-reveal {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.7s ease, opacity 0.7s ease;
-            opacity: 0;
-        }
-
-        .gift-interactive.opened ~ .gift-reveal {
-            max-height: 120px;
-            opacity: 1;
-        }
-
-        .gift-reveal p {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: 1.15em;
-            font-style: italic;
-            color: var(--verde-medio);
-            margin-top: 12px;
-        }
-
+        /* Hint debajo del wrapper */
         .gift-hint {
-            position: absolute;
-            bottom: -22px;
-            left: 50%;
-            transform: translateX(-50%);
             font-size: 0.68em;
             letter-spacing: 0.18em;
             text-transform: uppercase;
             color: var(--texto-suave);
             opacity: 0.45;
-            white-space: nowrap;
             font-family: 'Jost', sans-serif;
+            margin-top: 8px;
             transition: opacity 0.4s ease;
+        }
+
+        /* Mensaje al abrir — efecto escritura */
+        .gift-reveal {
+            overflow: hidden;
+            opacity: 0;
+            margin-bottom: 20px;
+            transition: opacity 0.4s ease;
+        }
+
+        .gift-reveal.visible {
+            opacity: 1;
+        }
+
+        .gift-reveal p {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.3em;
+            font-style: italic;
+            color: var(--verde-medio);
+            padding: 4px 0 20px;
+            letter-spacing: 0.04em;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 0;
+            transition: max-width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1.5px solid var(--verde-suave);
+        }
+
+        .gift-reveal.visible p {
+            max-width: 400px;
+        }
+
+        /* Cursor parpadeante que desaparece al terminar */
+        .gift-reveal.visible p {
+            animation: blink-cursor 0.7s step-end 6;
+        }
+
+        @keyframes blink-cursor {
+            0%, 100% { border-color: var(--verde-suave); }
+            50%       { border-color: transparent; }
+        }
+
+        /* Tras el parpadeo, quitar el cursor */
+        .gift-reveal.done p {
+            border-right-color: transparent;
+        }
+
+        /* Tapa abierta — NO poner transform aquí, la animación lid-fly lo maneja todo */
+
+        /* Brillo interior al abrir */
+        .gift-interactive.opened .gift-inner-glow {
+            opacity: 1;
+        }
+
+        .gift-inner-glow {
+            opacity: 0;
+            transition: opacity 0.6s ease 0.3s;
         }
 
         /* =============================================
@@ -809,9 +837,25 @@
         /* =============================================
            RESPONSIVE — MÓVIL
            ============================================= */
-        @media (max-width: 768px) {
+        /* ─── Rendimiento: reducir animaciones si el usuario lo prefiere ─── */
+        @media (prefers-reduced-motion: reduce) {
+            .header-ornament, .header h1, .header-divider, .header .date,
+            .scroll-hint { animation: none; opacity: 1; }
+            .gift-wrapper { animation: none; }
+            .scroll-hint svg { animation: none; }
+        }
 
-            .header::after { display: none; }
+        /* ─── Móvil: no cargar/mostrar el vídeo, usar solo el gradiente de fondo ─── */
+        @media (max-width: 768px) {
+            .video-background { display: none; }
+        }
+
+        /* ─── Optimización de capas de composición ─── */
+        .gift-wrapper { will-change: transform; }
+        .gift-lid     { will-change: transform, opacity; }
+        .section      { will-change: opacity, transform; }
+
+
 
             .section {
                 margin: 40px 0;
@@ -914,7 +958,7 @@
             <div class="section-header ceremonia-bg">
                 <div class="video-background">
                     <video autoplay muted loop playsinline>
-                        <source src="https://res.cloudinary.com/dtedobwme/video/upload/q_auto/f_auto/v1777113151/caridad2_kbohak.mp4" type="video/mp4">
+                        <source src="https://res.cloudinary.com/dtedobwme/video/upload/q_auto/v1777019304/caridad_sq0lol.mp4" type="video/mp4">
                     </video>
                 </div>
                 <h2>Santuario de Nuestra Señora de la Caridad</h2>
@@ -991,8 +1035,8 @@
 
         <!-- SECCIÓN 3: CONFIRMACIÓN -->
         <div class="section">
-            <div class="section-header confirmacion-bg image-background" style=" background-image: url('imagenes/confirmacion.png');">
-                <h2>Confirmación de asistencia</h2>
+            <div class="section-header confirmacion-bg image-background" style="background-image: url('imagenes/confirmación.png');">
+                <h2>Confirmación de Asistencia</h2>
             </div>
             <div class="section-content">
                 <div class="confirm-box">
@@ -1010,7 +1054,7 @@
 
         <!-- SECCIÓN 4: ALOJAMIENTO -->
         <div class="section">
-            <div class="section-header alojamiento-bg image-background" style=" background-image: url('imagenes/alojamiento.png');">
+            <div class="section-header alojamiento-bg image-background" style="background-image: url('imagenes/alojamiento.png');">
                 <h2>Alojamiento</h2>
             </div>
             <div class="section-content">
@@ -1045,30 +1089,31 @@
 
         <!-- SECCIÓN 5: REGALOS -->
         <div class="section">
-            <div class="section-header regalos-bg image-background" style=" background-image: url('imagenes/regalos.png');">
+            <div class="section-header regalos-bg image-background" style="/* background-image: url('imagenes/regalos.jpg'); */">
                 <h2>Regalos</h2>
             </div>
             <div class="section-content">
                 <div class="gift-box">
-                    <div class="gift-interactive" id="giftBox" onclick="openGift()">
-                        <div class="gift-sparkles">
-                            <span>✨</span><span>🌸</span><span>💛</span><span>✦</span><span>🌿</span>
+                    <div class="gift-wrapper">
+                        <div class="gift-interactive" id="giftBox" onclick="openGift()">
+                            <div class="gift-particles" id="giftParticles"></div>
+                            <svg class="gift-svg" viewBox="0 -40 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Cuerpo -->
+                                <rect x="12" y="32" width="56" height="34" rx="3" fill="#3b4a3f"/>
+                                <rect x="36" y="32" width="8" height="34" fill="#b89a5a" opacity="0.75"/>
+                                <rect x="14" y="34" width="18" height="7" rx="1" fill="white" opacity="0.05"/>
+                                <!-- Brillo interior (visible al abrir) -->
+                                <ellipse class="gift-inner-glow" cx="40" cy="33" rx="14" ry="5" fill="#d4b87a" opacity="0.35"/>
+                                <!-- Tapa -->
+                                <g class="gift-lid">
+                                    <rect x="10" y="18" width="60" height="15" rx="3" fill="#5a7060"/>
+                                    <rect x="36" y="6" width="8" height="27" rx="3" fill="#b89a5a"/>
+                                    <path d="M28 6 Q36 0 44 6" fill="none" stroke="#b89a5a" stroke-width="2.5" stroke-linecap="round"/>
+                                    <path d="M28 6 Q36 12 44 6" fill="none" stroke="#b89a5a" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                                </g>
+                            </svg>
                         </div>
-                        <svg class="gift-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Tapa (animada) -->
-                            <g class="gift-lid">
-                                <rect x="10" y="18" width="60" height="14" rx="2" fill="#5a7060"/>
-                                <rect x="37" y="10" width="6" height="22" rx="3" fill="#b89a5a"/>
-                                <ellipse cx="40" cy="10" rx="10" ry="6" fill="none" stroke="#b89a5a" stroke-width="2.5"/>
-                                <path d="M34 14 Q40 8 46 14" fill="none" stroke="#b89a5a" stroke-width="2"/>
-                            </g>
-                            <!-- Cuerpo -->
-                            <rect x="12" y="32" width="56" height="34" rx="2" fill="#3b4a3f"/>
-                            <rect x="37" y="32" width="6" height="34" fill="#b89a5a" opacity="0.7"/>
-                            <!-- Brillo sutil -->
-                            <rect x="14" y="34" width="20" height="8" rx="1" fill="white" opacity="0.06"/>
-                        </svg>
-                        <div class="gift-hint">toca para abrir</div>
+                        <div class="gift-hint" id="giftHint">toca para abrir</div>
                     </div>
                     <div class="gift-reveal" id="giftReveal">
                         <p>🌿 ¡Gracias por vuestro cariño! 🌿</p>
@@ -1104,7 +1149,7 @@
 
         <!-- SECCIÓN 7: APARCAMIENTO -->
         <div class="section">
-            <div class="section-header parking-bg image-background" style=" background-image: url('imagenes/parking.png');">
+            <div class="section-header parking-bg image-background" style="/* background-image: url('imagenes/parking.jpg'); */">
                 <h2>Aparcamiento</h2>
             </div>
             <div class="section-content">
@@ -1132,7 +1177,16 @@
     </footer>
 
     <script>
-        // Animación de aparición al hacer scroll
+        // ── Vídeo: no cargar en móvil (ahorra ~2-5 MB en conexiones lentas) ──
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.video-background video').forEach(v => {
+                v.removeAttribute('autoplay');
+                v.querySelectorAll('source').forEach(s => s.removeAttribute('src'));
+                v.load(); // cancela la descarga pendiente
+            });
+        }
+
+        // ── Animación de aparición al hacer scroll ──
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1143,26 +1197,89 @@
 
         document.querySelectorAll('.section').forEach(s => observer.observe(s));
 
-        // Regalo interactivo
-        function openGift() {
-            const box = document.getElementById('giftBox');
-            const sparkles = box.querySelector('.gift-sparkles');
+        // ── Regalo interactivo ──────────────────────────────────────────
+        const PARTICLES = ['🌸','✨','💛','🌿','⭐','🌼','✦','🎀','💚','🌷'];
 
-            // Disparar destellos siempre
-            sparkles.classList.remove('firing');
-            void sparkles.offsetWidth; // reflow para reiniciar animación
-            sparkles.classList.add('firing');
+        /**
+         * Lanza N partículas desde el centro superior de la caja
+         * hacia arriba en un abanico, simulando que salen del interior.
+         */
+        function burstParticles(count = 14, fromCenter = false) {
+            const container = document.getElementById('giftParticles');
+            if (!container) return;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('span');
+                el.className = 'gift-particle';
+                el.textContent = PARTICLES[Math.floor(Math.random() * PARTICLES.length)];
+
+                // Abanico simétrico: -70° a +70° respecto al eje vertical (arriba)
+                // angleDeg=0 → arriba puro; negativo → izquierda; positivo → derecha
+                const spread   = fromCenter ? 90 : 70;
+                const angleDeg = (Math.random() * 2 - 1) * spread; // rango [-spread, +spread]
+                const angleRad = angleDeg * Math.PI / 180;
+
+                // dx: sin(angle) → izquierda/derecha simétricamente
+                // dy: siempre negativo (hacia arriba); más fuerte cuanto más centrado
+                const dist = 60 + Math.random() * 85;  // px
+                const dx   =  Math.sin(angleRad) * dist;
+                const dy   = -Math.cos(angleRad) * dist; // negativo = arriba
+                const delay   = i * 35 + Math.random() * 40;  // ms stagger
+                const dur     = 700 + Math.random() * 500;     // ms
+
+                container.appendChild(el);
+
+                // Animación vía Web Animations API para precisión total
+                el.animate([
+                    { opacity: 0,   transform: `translate(-50%, -50%) scale(0.4)`,                          offset: 0    },
+                    { opacity: 1,   transform: `translate(calc(-50% + ${dx * 0.3}px), calc(-50% + ${dy * 0.3}px)) scale(1.2)`, offset: 0.15 },
+                    { opacity: 0.9, transform: `translate(calc(-50% + ${dx}px),       calc(-50% + ${dy}px))       scale(1)`,   offset: 0.75 },
+                    { opacity: 0,   transform: `translate(calc(-50% + ${dx * 1.2}px), calc(-50% + ${dy * 1.4}px)) scale(0.5)`, offset: 1    },
+                ], {
+                    duration: dur,
+                    delay: delay,
+                    easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
+                    fill: 'forwards',
+                }).onfinish = () => el.remove();
+            }
+        }
+
+        // Pequeño burst al hover (solo hover, no clic repetido)
+        document.getElementById('giftBox')?.addEventListener('mouseenter', () => {
+            if (!document.getElementById('giftBox').classList.contains('opened')) {
+                burstParticles(4);
+            }
+        });
+
+        function openGift() {
+            const box     = document.getElementById('giftBox');
+            const wrapper = box.closest('.gift-wrapper');
+            const reveal  = document.getElementById('giftReveal');
 
             if (box.classList.contains('opened')) {
-                // Ya abierto: sacudida
-                box.classList.remove('shake');
-                void box.offsetWidth;
-                box.classList.add('shake');
-                setTimeout(() => box.classList.remove('shake'), 500);
+                // Ya abierto: sacudir y nuevo burst
+                wrapper.classList.remove('shake');
+                void wrapper.offsetWidth;
+                wrapper.classList.add('shake');
+                burstParticles(10);
+                setTimeout(() => wrapper.classList.remove('shake'), 520);
             } else {
-                // Primera vez: abrir
+                // Primera apertura
                 box.classList.add('opened');
-                const hint = box.querySelector('.gift-hint');
+
+                // Burst principal tras que la tapa empiece a volar (300ms)
+                setTimeout(() => burstParticles(18), 300);
+                // Segundo burst más suave
+                setTimeout(() => burstParticles(10), 650);
+
+                // Mensaje aparece suavemente
+                setTimeout(() => {
+                    reveal.classList.add('visible');
+                    setTimeout(() => reveal.classList.add('done'), 5600);
+                }, 500);
+
+                // Ocultar hint
+                const hint = document.getElementById('giftHint');
                 if (hint) {
                     hint.style.opacity = '0';
                     setTimeout(() => hint.remove(), 400);
