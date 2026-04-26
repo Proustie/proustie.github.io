@@ -897,6 +897,27 @@
             display: block;
         }
 
+        /* ─── Mapa de aparcamiento ─── */
+        .map-embed {
+            margin-top: 28px;
+            width: 100%;
+            border-radius: 2px;
+            overflow: hidden;
+            border: 1px solid var(--tierra-claro);
+            aspect-ratio: 16 / 9;   /* proporcional, sin altura fija */
+        }
+
+        .map-embed iframe {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .map-embed { aspect-ratio: 4 / 3; } /* más cuadrado en móvil */
+        }
+
         /* =============================================
            FOOTER
            ============================================= */
@@ -1235,6 +1256,7 @@
                 <div class="hotel-list">
                     <div class="hotel-card sold-out">
                         <div class="sold-out-stamp">SIN DISPONIBILIDAD</div>
+                        <h4>🏨 Hotel Real de Illescas</h4>
                         <p><strong>Dirección:</strong> Pl. Hermanos Fernández Criado, 45200 Illescas, Toledo</p>
                         <p><strong>Distancia:</strong> 100 m.</p>
                         <p><strong>Teléfono:</strong> 925 54 16 99</p>
@@ -1328,13 +1350,13 @@
 
         <!-- SECCIÓN 6: PROGRAMA -->
         <div class="section">
-            <div class="section-header programa-bg image-background" style="background-image: url('imagenes/mapa.jpg');">
+            <div class="section-header programa-bg image-background" style="background-image: url('imagenes/programa.png');">
                 <h2>Programa del día</h2>
             </div>
             <div class="section-content">
                 <p class="section-intro">Así transcurrirá nuestro gran día. ¡No te lo pierdas!</p>
                 <div class="programa-image">
-                    <img src="programa.PNG" alt="Programa del día">
+                    <img src="imagenes/programa.png" alt="Programa del día" loading="lazy">
                 </div>
             </div>
         </div>
@@ -1347,10 +1369,16 @@
             <div class="section-content">
                 <div class="confirm-box">
                     <h3>🅿️ Dónde aparcar</h3>
-                    <p>Tanto el Santuario como La Hacienda del Marqués disponen de aparcamiento gratuito.</p>
-                    <p style="margin-top: 16px; color: #aaa; font-size: 0.92em; font-style: italic;">
-                        Más información disponible próximamente.
-                    </p>
+                    <p>Tanto el Santuario como La Hacienda del Marqués disponen de aparcamiento gratuito. En el mapa encontraréis las zonas habilitadas.</p>
+                    <div class="map-embed">
+                        <iframe
+                            src="https://www.google.com/maps/d/embed?mid=16GYf4IxBodr7T0IJ5kZgKN-Ukl1TnOQ"
+                            allowfullscreen
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Mapa de aparcamiento — Boda Iván y Minerva">
+                        </iframe>
+                    </div>
                 </div>
             </div>
         </div>
