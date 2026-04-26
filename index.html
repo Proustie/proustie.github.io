@@ -34,6 +34,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* elimina el flash azul al tocar en móvil */
         }
 
         html {
@@ -331,10 +332,10 @@
             justify-content: center;
             cursor: pointer;
             user-select: none;
+            touch-action: manipulation;
             width: 110px;
             height: 110px;
             border-radius: 50%;
-            /* overflow: visible es clave — la tapa sale hacia arriba */
             overflow: visible;
         }
 
@@ -580,6 +581,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
             min-height: 52px;
+            touch-action: manipulation;
         }
 
         .map-link:hover, .button:hover {
@@ -868,11 +870,23 @@
         /* ─── Optimización de capas de composición ─── */
         .gift-wrapper { will-change: transform; }
         .gift-lid     { will-change: transform, opacity; }
-        .section      { will-change: opacity, transform; }
+
+        /* Imagen de respaldo para secciones con vídeo — solo visible en móvil */
+        .mobile-image-bg {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+        }
 
         @media (max-width: 768px) {
             /* Vídeo: ocultar en móvil (el JS ya cancela la descarga) */
             .video-background { display: none; }
+            /* Mostrar imagen de respaldo */
+            .mobile-image-bg  { display: block; }
 
             .header::after { display: none; }
 
@@ -976,6 +990,7 @@
         <!-- SECCIÓN 1: CEREMONIA -->
         <div class="section">
             <div class="section-header ceremonia-bg">
+                <div class="mobile-image-bg" style="background-image: url('imagenes/iglesia.jpeg');"></div>
                 <div class="video-background">
                     <video autoplay muted loop playsinline>
                         <source src="https://res.cloudinary.com/dtedobwme/video/upload/q_auto/v1777019304/caridad_sq0lol.mp4" type="video/mp4">
@@ -1056,7 +1071,7 @@
         <!-- SECCIÓN 3: CONFIRMACIÓN -->
         <div class="section">
             <div class="section-header confirmacion-bg image-background" style="background-image: url('imagenes/confirmacion.png');">
-                <h2>Confirmación de Asistencia</h2>
+                <h2>Confirmación de asistencia</h2>
             </div>
             <div class="section-content">
                 <div class="confirm-box">
@@ -1108,7 +1123,7 @@
 
         <!-- SECCIÓN 5: REGALOS -->
         <div class="section">
-            <div class="section-header regalos-bg image-background" style="/* background-image: url('imagenes/regalos.jpg'); */">
+            <div class="section-header regalos-bg image-background" style="background-image: url('imagenes/regalos.png');">
                 <h2>Regalos</h2>
             </div>
             <div class="section-content">
@@ -1149,8 +1164,8 @@
 
         <!-- SECCIÓN 6: PROGRAMA -->
         <div class="section">
-            <div class="section-header programa-bg image-background" style="/* background-image: url('imagenes/programa_header.jpg'); */">
-                <h2>Programa del Día</h2>
+            <div class="section-header programa-bg image-background" style="background-image: url('imagenes/mapa.jpg');">
+                <h2>Programa del día</h2>
             </div>
             <div class="section-content">
                 <p class="section-intro">Así transcurrirá nuestro gran día. ¡No te lo pierdas!</p>
@@ -1168,7 +1183,7 @@
 
         <!-- SECCIÓN 7: APARCAMIENTO -->
         <div class="section">
-            <div class="section-header parking-bg image-background" style="/* background-image: url('imagenes/parking.jpg'); */">
+            <div class="section-header parking-bg image-background" style="background-image: url('imagenes/parking.png');">
                 <h2>Aparcamiento</h2>
             </div>
             <div class="section-content">
