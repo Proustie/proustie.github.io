@@ -680,9 +680,29 @@
             font-family: 'Jost', sans-serif;
         }
 
-        /* =============================================
-           REGALOS
-           ============================================= */
+        /* ─── Sello LLENO ─── */
+        .hotel-card.sold-out {
+            opacity: 0.72;
+        }
+        .hotel-card.sold-out::after {
+            content: 'LLENO';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-28deg);
+            font-family: 'Jost', sans-serif;
+            font-size: 1.55em;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            color: #c0392b;
+            border: 2.5px solid #c0392b;
+            padding: 6px 18px;
+            border-radius: 4px;
+            opacity: 0.82;
+            pointer-events: none;
+            white-space: nowrap;
+            box-shadow: inset 0 0 0 1px rgba(192,57,43,0.15);
+        }
         .gift-box {
             text-align: center;
             max-width: 620px;
@@ -845,17 +865,16 @@
             .scroll-hint svg { animation: none; }
         }
 
-        /* ─── Móvil: no cargar/mostrar el vídeo, usar solo el gradiente de fondo ─── */
-        @media (max-width: 768px) {
-            .video-background { display: none; }
-        }
-
         /* ─── Optimización de capas de composición ─── */
         .gift-wrapper { will-change: transform; }
         .gift-lid     { will-change: transform, opacity; }
         .section      { will-change: opacity, transform; }
 
+        @media (max-width: 768px) {
+            /* Vídeo: ocultar en móvil (el JS ya cancela la descarga) */
+            .video-background { display: none; }
 
+            .header::after { display: none; }
 
             .section {
                 margin: 40px 0;
@@ -888,6 +907,7 @@
                 border-right: none;
             }
 
+            /* Hoteles: en móvil se apilan, en escritorio 3 columnas (auto-fit lo gestiona) */
             .hotel-list {
                 grid-template-columns: 1fr;
             }
@@ -1035,7 +1055,7 @@
 
         <!-- SECCIÓN 3: CONFIRMACIÓN -->
         <div class="section">
-            <div class="section-header confirmacion-bg image-background" style="background-image: url('imagenes/confirmacion.png');">
+            <div class="section-header confirmacion-bg image-background" style="background-image: url('imagenes/confirmación.png');">
                 <h2>Confirmación de Asistencia</h2>
             </div>
             <div class="section-content">
@@ -1062,8 +1082,7 @@
                     Si necesitas alojamiento, aquí te dejamos algunas opciones cercanas.
                 </p>
                 <div class="hotel-list">
-                    <div class="hotel-card">
-                        <h4>🏨 Hotel Real de Illescas</h4>
+                    <div class="hotel-card sold-out">
                         <p><strong>Dirección:</strong> Pl. Hermanos Fernández Criado, 45200 Illescas, Toledo</p>
                         <p><strong>Distancia:</strong> 100 m.</p>
                         <p><strong>Teléfono:</strong> 925 54 16 99</p>
