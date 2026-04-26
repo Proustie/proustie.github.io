@@ -690,7 +690,7 @@
 
         /* ─── Sello SIN DISPONIBILIDAD ─── */
         .hotel-card.sold-out {
-            opacity: 0.70;
+            opacity: 0.85;   /* menos apagada, el sello habla por sí solo */
             overflow: hidden;
         }
         .sold-out-stamp {
@@ -699,19 +699,19 @@
             left: 50%;
             transform: translate(-50%, -50%) rotate(-28deg);
             font-family: 'Jost', sans-serif;
-            font-size: 0.78em;
-            font-weight: 500;
-            letter-spacing: 0.2em;
+            font-size: 0.82em;
+            font-weight: 700;            /* negrita */
+            letter-spacing: 0.22em;
             text-align: center;
             line-height: 1.4;
-            color: #c0392b;
-            border: 2px solid #c0392b;
-            padding: 8px 14px;
-            border-radius: 4px;
-            opacity: 0.88;
+            color: #922b21;              /* rojo más oscuro */
+            border: 3px solid #922b21;   /* borde más grueso */
+            padding: 9px 16px;
+            border-radius: 3px;
+            opacity: 1;                  /* sin transparencia: que se vea */
             pointer-events: none;
             white-space: nowrap;
-            box-shadow: inset 0 0 0 1px rgba(192,57,43,0.12);
+            background: rgba(255,255,255,0.55); /* fondo semitransparente para contraste */
             z-index: 2;
         }
         .gift-box {
@@ -897,7 +897,122 @@
             display: block;
         }
 
-        /* ─── Mapa de aparcamiento ─── */
+        /* ─── Formulario de confirmación ─── */
+        .confirm-form {
+            margin-top: 32px;
+            text-align: left;
+        }
+
+        .form-row {
+            margin-bottom: 22px;
+        }
+
+        .form-row label {
+            display: block;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.68em;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--texto-suave);
+            margin-bottom: 8px;
+        }
+
+        .form-row input,
+        .form-row select,
+        .form-row textarea {
+            width: 100%;
+            background: var(--crema);
+            border: 1px solid var(--tierra-claro);
+            border-radius: 0;
+            padding: 13px 16px;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.88em;
+            font-weight: 300;
+            color: var(--texto);
+            outline: none;
+            transition: border-color 0.25s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .form-row select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 38px;
+            cursor: pointer;
+        }
+
+        .form-row textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .form-row input:focus,
+        .form-row select:focus,
+        .form-row textarea:focus {
+            border-color: var(--verde-medio);
+        }
+
+        .form-row input::placeholder,
+        .form-row textarea::placeholder {
+            color: var(--texto-suave);
+            opacity: 0.6;
+        }
+
+        .form-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 540px) {
+            .form-cols { grid-template-columns: 1fr; }
+        }
+
+        .form-submit {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .form-notice {
+            margin-top: 18px;
+            font-size: 0.75em;
+            color: var(--texto-suave);
+            text-align: center;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Estado enviado */
+        .form-success {
+            display: none;
+            padding: 36px 24px;
+            text-align: center;
+            border: 1px solid var(--tierra-claro);
+            background: var(--crema-oscura);
+        }
+
+        .form-success .success-icon {
+            font-size: 2em;
+            margin-bottom: 12px;
+        }
+
+        .form-success h4 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.4em;
+            font-weight: 400;
+            color: var(--verde-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .form-success p {
+            font-size: 0.9em;
+            color: var(--texto-suave);
+        }
+
+
         .map-embed {
             margin-top: 28px;
             width: 100%;
@@ -1233,12 +1348,69 @@
             <div class="section-content">
                 <div class="confirm-box">
                     <h3>¿Contamos contigo?</h3>
-                    <p>Por favor, confirma tu asistencia antes del 7 de mayo de 2026.</p>
-                    <p>Te agradeceríamos que nos indicases si tienes <strong>alguna alergia o intolerancia alimentaria</strong>.</p>
-                    <div class="button-group" style="margin-top: 32px;">
-                        <a href="https://forms.gle/TU_ENLACE_DE_GOOGLE_FORMS" target="_blank" rel="noopener noreferrer" class="button">
-                            ✉️ Confirmar asistencia
-                        </a>
+                    <p>Por favor, confirma tu asistencia antes del <strong>7 de mayo de 2026</strong>.</p>
+                    <p>Si tienes alguna alergia o intolerancia alimentaria, indícala en el formulario.</p>
+
+                    
+                    <form class="confirm-form" id="confirmForm"
+                          action="https://formspree.io/f/xojybgvq"
+                          method="POST"
+                          onsubmit="handleFormSubmit(event)">
+
+                        <div class="form-cols">
+                            <div class="form-row">
+                                <label for="nombre">Nombre completo *</label>
+                                <input type="text" id="nombre" name="nombre"
+                                       placeholder="Tu nombre" required>
+                            </div>
+                            <div class="form-row">
+                                <label for="asistencia">Asistencia *</label>
+                                <select id="asistencia" name="asistencia" required>
+                                    <option value="" disabled selected>Selecciona…</option>
+                                    <option value="Asistiré">✓ Asistiré con mucho gusto</option>
+                                    <option value="No podré asistir">✗ No podré asistir</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-cols">
+                            <div class="form-row">
+                                <label for="menu">Menú *</label>
+                                <select id="menu" name="menu" required>
+                                    <option value="" disabled selected>Selecciona…</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Vegetariano">Vegetariano</option>
+                                    <option value="Vegano">Vegano</option>
+                                    <option value="Sin gluten">Sin gluten</option>
+                                    <option value="Infantil">Infantil</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label for="acompanantes">Acompañantes</label>
+                                <input type="number" id="acompanantes" name="acompanantes"
+                                       min="0" max="10" placeholder="0" value="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="alergias">Alergias o intolerancias</label>
+                            <textarea id="alergias" name="alergias"
+                                      placeholder="Si no tienes ninguna, puedes dejarlo vacío…"></textarea>
+                        </div>
+
+                        <div class="form-submit">
+                            <button type="submit" class="button" id="submitBtn">
+                                ✉️ Enviar confirmación
+                            </button>
+                        </div>
+                        <p class="form-notice">* Campos obligatorios</p>
+                    </form>
+
+                    <!-- Mensaje de éxito -->
+                    <div class="form-success" id="formSuccess">
+                        <div class="success-icon">🌸</div>
+                        <h4>¡Gracias por confirmar!</h4>
+                        <p>Hemos recibido tu respuesta. ¡Nos hace muchísima ilusión celebrarlo contigo!</p>
                     </div>
                 </div>
             </div>
@@ -1356,7 +1528,7 @@
             <div class="section-content">
                 <p class="section-intro">Así transcurrirá nuestro gran día. ¡No te lo pierdas!</p>
                 <div class="programa-image">
-                    <img src="imagenes/programa2.png" alt="Programa del día" loading="lazy">
+                    <img src="imagenes/programa.png" alt="Programa del día" loading="lazy">
                 </div>
             </div>
         </div>
@@ -1416,6 +1588,34 @@
         }, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
 
         document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+        // ── Formulario de confirmación ────────────────────────────────
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const form = document.getElementById('confirmForm');
+            const btn  = document.getElementById('submitBtn');
+
+            btn.textContent = 'Enviando…';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (res.ok) {
+                    form.style.display = 'none';
+                    document.getElementById('formSuccess').style.display = 'block';
+                } else {
+                    throw new Error();
+                }
+            } catch {
+                btn.textContent = 'Error al enviar. Inténtalo de nuevo.';
+                btn.disabled = false;
+            }
+        }
 
         // ── Revelador de cuenta bancaria ────────────────────────────────
         function toggleIban() {
