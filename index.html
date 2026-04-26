@@ -691,11 +691,11 @@
         /* ─── Sello SIN DISPONIBILIDAD ─── */
         .hotel-card.sold-out {
             opacity: 0.70;
-            overflow: hidden; /* el sello no se desborda fuera de la tarjeta */
+            overflow: hidden;
         }
         .hotel-card.sold-out::after {
-            content: 'SIN\ADISPONIBILIDAD';
-            white-space: pre;           /* respeta el salto \A */
+            content: "SIN\ADISPONIBILIDAD";
+            white-space: pre;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -817,6 +817,22 @@
 
         .iban-row {
             padding: 22px 32px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* La fila del IBAN tiene número y botón en la misma línea */
+        .iban-row--account {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .iban-row--account .iban-col {
+            display: flex;
+            flex-direction: column;
         }
 
         .iban-row + .iban-row {
@@ -846,14 +862,6 @@
             font-size: 1.05em;
             letter-spacing: 0.08em;
             color: var(--verde-oscuro);
-        }
-
-        .iban-footer {
-            padding: 14px 32px;
-            border-top: 1px solid var(--tierra-claro);
-            display: flex;
-            justify-content: flex-end;
-            background: rgba(0,0,0,0.018);
         }
 
         .iban-copy {
@@ -1307,16 +1315,16 @@
                                     <div class="iban-label">Beneficiarios</div>
                                     <div class="iban-value">Iván Molina Rincón &amp; Minerva Acuña Ruiz</div>
                                 </div>
-                                <div class="iban-row">
-                                    <div class="iban-label">Número de cuenta</div>
-                                    <div class="iban-value iban-value--mono" id="ibanNumber">ES89 1583 0001 1691 5737 7663</div>
-                                </div>
-                                <div class="iban-footer">
-                                    <button class="iban-copy" id="ibanCopy" onclick="copyIban()">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <div class="iban-row iban-row--account">
+                                    <div class="iban-col">
+                                        <div class="iban-label">Número de cuenta</div>
+                                        <div class="iban-value iban-value--mono" id="ibanNumber">ES89 1583 0001 1691 5737 7663</div>
+                                    </div>
+                                    <button class="iban-copy" id="ibanCopy" onclick="copyIban()" title="Copiar IBAN">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                                             <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
                                         </svg>
-                                        <span>Copiar IBAN</span>
+                                        <span>Copiar</span>
                                     </button>
                                 </div>
                             </div>
@@ -1414,7 +1422,7 @@
                 span.textContent = '¡Copiado!';
                 setTimeout(() => {
                     btn.classList.remove('copied');
-                    span.textContent = 'Copiar IBAN';
+                    span.textContent = 'Copiar';
                 }, 2200);
             };
 
