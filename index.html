@@ -693,26 +693,26 @@
             opacity: 0.70;
             overflow: hidden;
         }
-        .hotel-card.sold-out::after {
-            content: "SIN\ADISPONIBILIDAD";
-            white-space: pre;
+        .sold-out-stamp {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-28deg);
             font-family: 'Jost', sans-serif;
-            font-size: 1.05em;
+            font-size: 0.78em;
             font-weight: 500;
-            letter-spacing: 0.18em;
+            letter-spacing: 0.2em;
             text-align: center;
-            line-height: 1.35;
+            line-height: 1.4;
             color: #c0392b;
             border: 2px solid #c0392b;
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 4px;
-            opacity: 0.85;
+            opacity: 0.88;
             pointer-events: none;
+            white-space: nowrap;
             box-shadow: inset 0 0 0 1px rgba(192,57,43,0.12);
+            z-index: 2;
         }
         .gift-box {
             text-align: center;
@@ -895,15 +895,6 @@
             width: 100%;
             height: auto;
             display: block;
-        }
-
-        .programa-placeholder {
-            background: var(--crema);
-            padding: 70px 32px;
-            text-align: center;
-            color: var(--texto-suave);
-            font-style: italic;
-            border: 1px dashed var(--tierra);
         }
 
         /* =============================================
@@ -1243,6 +1234,7 @@
                 </p>
                 <div class="hotel-list">
                     <div class="hotel-card sold-out">
+                        <div class="sold-out-stamp">SIN DISPONIBILIDAD</div>
                         <p><strong>Dirección:</strong> Pl. Hermanos Fernández Criado, 45200 Illescas, Toledo</p>
                         <p><strong>Distancia:</strong> 100 m.</p>
                         <p><strong>Teléfono:</strong> 925 54 16 99</p>
@@ -1342,11 +1334,7 @@
             <div class="section-content">
                 <p class="section-intro">Así transcurrirá nuestro gran día. ¡No te lo pierdas!</p>
                 <div class="programa-image">
-                                        <img src="imagenes/programa.png" alt="Programa del día">
-                                       <div class="programa-placeholder">
-                        <p style="font-size: 1.1em;">📸 Aquí irá vuestra imagen del timeline del día</p>
-                        <p style="margin-top: 12px; font-size: 0.9em;">Guarda tu imagen como <code>imagenes/programa.jpg</code> y descomenta la línea en el HTML</p>
-                    </div>
+                    <img src="imagenes/programa.png" alt="Programa del día">
                 </div>
             </div>
         </div>
